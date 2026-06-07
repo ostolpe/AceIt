@@ -13,7 +13,7 @@ public class Question
 public class Session
 {
     public int Id { get; set; }
-
+    
     public List<Question> Questions { get; set; } = [];
     //userId later
 }
@@ -27,7 +27,7 @@ public class AiResponse
 
 public enum Topic
 {
-    
+   CSharp, DotNet 
 }
 
 public enum Difficulty

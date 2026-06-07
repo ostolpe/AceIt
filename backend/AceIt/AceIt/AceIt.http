@@ -1,6 +1,23 @@
 @AceIt_HostAddress = http://localhost:5241
 
-GET {{AceIt_HostAddress}}/weatherforecast/
+GET {{AceIt_HostAddress}}/api/Sessions
 Accept: application/json
 
 ###
+POST {{AceIt_HostAddress}}/api/Sessions/submit
+Content-Type: application/json
+Accept: application/json
+
+{
+  "sessionId": 0,
+  "answers": [
+    {
+      "questionId": 1,
+      "userAnswer": "Async/await allows you to write asynchronous code without blocking the thread. Await releases the thread while waiting for an operation to complete."
+    },
+    {
+      "questionId": 2,
+      "userAnswer": "Dependency injection is when you inject dependencies into a class instead of the class creating them itself."
+    }
+  ]
+}
