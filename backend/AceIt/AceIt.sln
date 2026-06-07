@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AceIt", "AceIt\AceIt.csproj", "{9495A3E8-299D-4415-B4DB-108642E33425}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC12B8F4-A42C-4062-94AE-CBDD7E85E0E2}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aceit.Tests", "Aceit.Tests\Aceit.Tests.csproj", "{E91B7C86-A23E-4467-BF12-ECFA211FDC7F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9495A3E8-299D-4415-B4DB-108642E33425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9495A3E8-299D-4415-B4DB-108642E33425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9495A3E8-299D-4415-B4DB-108642E33425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9495A3E8-299D-4415-B4DB-108642E33425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E91B7C86-A23E-4467-BF12-ECFA211FDC7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E91B7C86-A23E-4467-BF12-ECFA211FDC7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E91B7C86-A23E-4467-BF12-ECFA211FDC7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E91B7C86-A23E-4467-BF12-ECFA211FDC7F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
