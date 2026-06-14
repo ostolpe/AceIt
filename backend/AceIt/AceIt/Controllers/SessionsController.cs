@@ -1,5 +1,6 @@
 using AceIt;
 using AceIt.DTOs;
+using AceIt.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aceit.Controllers;
@@ -18,7 +19,8 @@ public class SessionsController(ISessionService sessionService) : ControllerBase
     [HttpPost("submit")]
     public async Task<IActionResult> FinishSession([FromBody] FinishSessionRequest request)
     {
-        var result = await sessionService.FinishSession(request);
-        return Ok(result);
+        // var result = await sessionService.FinishSession(request);
+        // return Ok(result);
+        return Ok(new ResultDto("WOW 10/10 GREAT JOB"));
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AceIt.DTOs;
 
-namespace AceIt;
+namespace AceIt.Services;
 
 public interface ISessionService
 {

@@ -1,4 +1,3 @@
-using AceIt;
 using AceIt.Data;
 using AceIt.Services;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +17,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.UseCors(x => x
+    .AllowAnyHeader()
+    .AllowAnyOrigin()
+    .AllowAnyMethod());
 
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
