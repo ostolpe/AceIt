@@ -21,6 +21,13 @@ public class SessionsController(ISessionService sessionService) : ControllerBase
     {
         // var result = await sessionService.FinishSession(request);
         // return Ok(result);
-        return Ok(new ResultDto("WOW 10/10 GREAT JOB"));
+        var mockRes = new ResultDto(
+        request.Answers.Select(a => new QuestionResult(
+            a.QuestionId,
+            new Random().Next(1, 10),
+            "Mock feedback for testing purposes."
+        )).ToList());
+
+        return Ok(mockRes);
     }
 }
