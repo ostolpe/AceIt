@@ -37,6 +37,8 @@ export interface QuestionCardProps {
   onNext: () => void;
   onReview: () => void;
   isLastQuestion: boolean;
+  currentIndex: number;
+  totalQuestions: number;
 }
 
 export interface AnswersReviewProps {

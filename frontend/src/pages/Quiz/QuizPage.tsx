@@ -10,6 +10,7 @@ import type {
 import QuestionCard from "../../components/QuestionCard";
 import AnswersReview from "../../components/AnswersReview";
 import { Navigate } from "react-router-dom";
+import "./QuizPage.css";
 
 const QuizPage = () => {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -79,7 +80,12 @@ const QuizPage = () => {
   };
 
   if (isLoading || questions.length === 0) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-screen">
+        <span className="loading-dot" />
+        <p>Preparing your session…</p>
+      </div>
+    );
   }
 
   if (result) {
@@ -109,6 +115,8 @@ const QuizPage = () => {
         onNext={next}
         onReview={() => setIsReviewing(true)}
         isLastQuestion={currIndex === questions.length - 1}
+        currentIndex={currIndex}
+        totalQuestions={questions.length}
       />
     </>
   );

@@ -1,0 +1,34 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  padding: 1.75rem clamp(1.5rem, 5vw, 4rem) 0;
+}
+
+.app-logo {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--muted);
+}
+
+.app-logo-spark {
+  position: relative;
+  display: inline-block;
+  font-size: 1.1em;
+  font-weight: 900;
+  color: var(--blue);
+  text-shadow: 0 0 0.5em color-mix(in srgb, var(--blue) 55%, transparent);
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 5vw, 4rem);
+}

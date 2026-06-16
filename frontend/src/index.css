@@ -15,6 +15,13 @@
   --blue: #7eb8f7;
 
   --font: 'Hanken Grotesk', system-ui, sans-serif;
+
+  --surface: color-mix(in srgb, var(--gray) 60%, var(--black));
+  --border: color-mix(in srgb, var(--white) 12%, transparent);
+  --border-strong: color-mix(in srgb, var(--white) 24%, transparent);
+  --muted: color-mix(in srgb, var(--white) 55%, var(--black));
+  --blue-dim: color-mix(in srgb, var(--blue) 16%, transparent);
+  --blue-strong: color-mix(in srgb, var(--blue) 70%, var(--white));
 }
 
 html {
@@ -28,6 +35,62 @@ body {
   color: var(--white);
   line-height: 1.6;
   min-height: 100vh;
+}
+
+::selection {
+  background: var(--blue);
+  color: var(--black);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.btn {
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  transition:
+    transform 0.15s ease,
+    background 0.2s ease,
+    opacity 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-ghost {
+  color: var(--muted);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  color: var(--white);
+}
+
+.btn-ghost:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.btn-solid {
+  background: var(--blue);
+  color: var(--black);
+}
+
+.btn-solid:hover {
+  background: var(--blue-strong);
 }
 
 img,
