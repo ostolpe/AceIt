@@ -58,12 +58,12 @@ const QuizPage = () => {
   const submitSession = async () => {
     setIsLoading(true);
     const request: FinishRequest = {
-      id: sessionId,
+      sessionId: sessionId,
       answers: answers,
     };
 
     try {
-      const res = await apiFetch("/api/session/submimt", {
+      const res = await apiFetch("/api/sessions/submit", {
         method: "POST",
         body: JSON.stringify(request),
       });
@@ -99,7 +99,7 @@ const QuizPage = () => {
     );
   }
   return (
-    <>
+    <div className="quiz-page">
       <QuestionCard
         question={questions[currIndex]}
         answer={
@@ -114,7 +114,7 @@ const QuizPage = () => {
         currentIndex={currIndex}
         totalQuestions={questions.length}
       />
-    </>
+    </div>
   );
 };
 

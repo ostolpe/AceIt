@@ -15,7 +15,7 @@ export interface Answer {
 }
 
 export interface FinishRequest {
-  id: number;
+  sessionId: number;
   answers: Answer[];
 }
 

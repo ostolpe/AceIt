@@ -1,7 +1,5 @@
-import React from "react";
-
-const PorfilePage = () => {
+const ProfilePage = () => {
   return <div>Wow very protected</div>;
 };
 
-export default PorfilePage;
+export default ProfilePage;

@@ -5,6 +5,7 @@ import ResultPage from "./pages/Result/ResultPage";
 import AuthPage from "./pages/Auth/AuthPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import HomePage from "./pages/Home/HomePage";
 import Button from "./components/Button";
 import { useAuth } from "./hooks/useAuth";
 
@@ -27,23 +28,39 @@ function App() {
         <nav className="app-nav">
           {isAuthenticated ? (
             <>
-              <Link to="/profile" className="btn btn-ghost">Profile</Link>
-              <Button variant="ghost" onClick={handleLogout}>Logout</Button>
+              <Link to="/profile" className="btn btn-ghost">
+                Profile
+              </Link>
+              <Button variant="ghost" onClick={handleLogout}>
+                Logout
+              </Button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn btn-ghost">Sign in</Link>
-              <Link to="/register" className="btn btn-solid">Get started</Link>
+              <Link to="/login" className="btn btn-ghost">
+                Sign in
+              </Link>
+              <Link to="/register" className="btn btn-solid">
+                Get started
+              </Link>
             </>
           )}
         </nav>
       </header>
       <main className="app-main">
         <Routes>
-          <Route path="/" element={<QuizPage />} />
           <Route path="/results" element={<ResultPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/register" element={<AuthPage mode="register" />} />
+          <Route
+            path="/quiz"
+            element={
+              <ProtectedRoute>
+                <QuizPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/profile"
             element={
