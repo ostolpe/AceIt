@@ -53,3 +53,14 @@ export interface ResultPageState {
   questions: Question[];
   answers: Answer[];
 }
+
+export interface AuthContextType {
+  token: string | null;
+  login: (token: string) => void;
+  logout: () => void;
+  isAuthenticated: boolean;
+}
+
+export interface LoginResponse {
+  token: string;
+}

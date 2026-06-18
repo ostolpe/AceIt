@@ -5,15 +5,14 @@ import type {
   Result,
   SessionResponse,
   FinishRequest,
-  SubmitResponse,
 } from "../../types";
 import QuestionCard from "../../components/QuestionCard";
 import AnswersReview from "../../components/AnswersReview";
 import { Navigate } from "react-router-dom";
 import "./QuizPage.css";
+import { useApi } from "../../hooks/useApi";
 
 const QuizPage = () => {
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [sessionId, setSessionId] = useState<number>(0);
@@ -21,15 +20,15 @@ const QuizPage = () => {
   const [result, setResult] = useState<Result[] | null>(null);
   const [isReviewing, setIsReviewing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { apiFetch } = useApi();
 
   useEffect(() => {
     const fetchQuestions = async () => {
       setIsLoading(true);
       try {
-        const json = await fetch(`${baseUrl}/api/sessions`);
-        const data: SessionResponse = await json.json();
-        setQuestions(data.questions);
-        setSessionId(data.id);
+        const res: SessionResponse = await apiFetch("/api/sessions");
+        setQuestions(res.questions);
+        setSessionId(res.id);
       } catch (err) {
         console.log(err);
       } finally {
@@ -62,16 +61,13 @@ const QuizPage = () => {
       id: sessionId,
       answers: answers,
     };
+
     try {
-      const json = await fetch(`${baseUrl}/api/sessions/submit`, {
+      const res = await apiFetch("/api/session/submimt", {
         method: "POST",
         body: JSON.stringify(request),
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
-      const data: SubmitResponse = await json.json();
-      setResult(data.results);
+      setResult(res.results);
     } catch (err) {
       console.log(err);
     } finally {
