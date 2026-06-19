@@ -1,6 +1,6 @@
-using System.Reflection.Metadata.Ecma335;
 using AceIt.DTOs;
 using AceIt.Models;
+using AceIt.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +8,7 @@ namespace AceIt.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(UserManager<User> userManager, SignInManager<User> signInManager) : ControllerBase
+    public class AuthController(UserManager<User> userManager, SignInManager<User> signInManager, JwtService jwtService) : ControllerBase
     {
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest req)
@@ -19,14 +19,14 @@ namespace AceIt.Controllers
                 UserName = req.Email,
             };
             var res = await userManager.CreateAsync(user, req.Password);
-
             if (!res.Succeeded)
                 return BadRequest(res.Errors);
-            return StatusCode(201, new { id = user.Id, email = user.Email });
+            var token = jwtService.GenerateToken(user);
+            return StatusCode(201, new LoginResponse(token));
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] RegisterRequest req)
+        public async Task<IActionResult> Login([FromBody] LoginRequest req)
         {
             var user = await userManager.FindByEmailAsync(req.Email);
             if (user is null) return Unauthorized();
@@ -34,7 +34,8 @@ namespace AceIt.Controllers
             if (!res.Succeeded)
                 return Unauthorized();
 
-            return Ok("Beautiful JWT token coming right here");
+            var token = jwtService.GenerateToken(user);
+            return Ok(new LoginResponse(token));
         }
     }
 }

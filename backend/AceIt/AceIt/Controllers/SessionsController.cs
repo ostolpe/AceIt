@@ -1,6 +1,7 @@
-using AceIt;
+using System.Security.Claims;
 using AceIt.DTOs;
 using AceIt.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aceit.Controllers;
@@ -9,25 +10,22 @@ namespace Aceit.Controllers;
 [ApiController]
 public class SessionsController(ISessionService sessionService) : ControllerBase
 {
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> StartSession()
     {
-        var result = await sessionService.StartSession();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new InvalidOperationException("User id claim missing from token.");
+
+        var result = await sessionService.StartSession(userId);
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("submit")]
     public async Task<IActionResult> FinishSession([FromBody] FinishSessionRequest request)
     {
-        // var result = await sessionService.FinishSession(request);
-        // return Ok(result);
-        var mockRes = new ResultDto(
-        request.Answers.Select(a => new QuestionResult(
-            a.QuestionId,
-            new Random().Next(1, 10),
-            "Mock feedback for testing purposes."
-        )).ToList());
-
-        return Ok(mockRes);
+        var result = await sessionService.FinishSession(request);
+        return Ok(result);
     }
 }

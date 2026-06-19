@@ -9,5 +9,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 {
     public DbSet<Question> Questions { get; set; }
     public DbSet<Session> Sessions { get; set; }
-    public DbSet<AiResponse> AiResponses { get; set; }
+    public DbSet<QuestionResult> QuestionResults { get; set; }
 }

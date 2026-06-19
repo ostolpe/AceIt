@@ -8,7 +8,7 @@ namespace AceIt.Services;
 
 public class ClaudeService(IConfiguration config) : IAiService
 {
-    public async Task<ResultDto> GradeSession(FinishSessionRequest request)
+    public async Task<SessionSummaryDto> GradeSession(FinishSessionRequest request)
     {
         var client = new AnthropicClient
         { ApiKey = config["Anthropic:ANTHROPIC_API_KEY"] };
@@ -40,12 +40,12 @@ public class ClaudeService(IConfiguration config) : IAiService
             .Trim();
         var xml = XDocument.Parse(cleanXml);
 
-        var results = xml.Descendants("result").Select(r => new QuestionResult(
+        var results = xml.Descendants("result").Select(r => new QuestionResultDto(
             int.Parse(r.Element("questionId")!.Value),
             int.Parse(r.Element("score")!.Value),
             r.Element("feedback")!.Value
         )).ToList();
 
-        return new ResultDto(results);
+        return new SessionSummaryDto(results);
     }
 }

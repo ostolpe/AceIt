@@ -1,4 +1,8 @@
 namespace AceIt.DTOs;
 
-public record ResultDto(List<QuestionResult> Results);
-public record QuestionResult(int QuestionId, int Score, string Feedback);
+public record SessionSummaryDto(List<QuestionResultDto> Results)
+{
+    public double AverageScore => Results.Count == 0 ? 0 : (double)Results.Sum(x => x.Score) / Results.Count;
+};
+
+public record QuestionResultDto(int QuestionId, int Score, string Feedback);
