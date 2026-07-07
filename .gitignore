@@ -9,6 +9,9 @@
 # Dev appsettings
 **/appsettings.Development.json
 
+# Markdown docs (working notes kept local)
+*.md
+
 # User-specific files
 *.rsuser
 *.suo
