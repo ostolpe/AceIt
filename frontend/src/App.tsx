@@ -49,7 +49,14 @@ function App() {
       </header>
       <main className="app-main">
         <Routes>
-          <Route path="/results" element={<ResultPage />} />
+          <Route
+            path="/results"
+            element={
+              <ProtectedRoute>
+                <ResultPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/register" element={<AuthPage mode="register" />} />

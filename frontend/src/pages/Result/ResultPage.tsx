@@ -1,9 +1,16 @@
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import type { ResultPageState } from "../../types";
 import "./ResultPage.css";
 
 const ResultPage = () => {
-  const { result, questions, answers }: ResultPageState = useLocation().state;
+  // Results are passed via navigation state from the quiz. On a refresh or a
+  // direct visit that state is gone, so send the user back to start a session.
+  const state = useLocation().state as ResultPageState | null;
+  if (!state) {
+    return <Navigate to="/" replace />;
+  }
+
+  const { result, questions, answers } = state;
   const combined = result.map((res) => ({
     result: res,
     answer: answers.find((x) => x.questionId === res.questionId),
