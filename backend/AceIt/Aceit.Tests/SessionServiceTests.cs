@@ -31,21 +31,15 @@ public class SessionServiceTests : IDisposable
         _connection.Dispose();
     }
 
-    private sealed class FakeAiService(Func<FinishSessionRequest, SessionSummaryDto>? grader = null) : IAiService
+    private sealed class FakeAiService(SessionSummaryDto response) : IAiService
     {
         public bool WasCalled { get; private set; }
 
         public Task<SessionSummaryDto> GradeSession(FinishSessionRequest request)
         {
             WasCalled = true;
-            var summary = grader?.Invoke(request) ?? DefaultGrade(request);
-            return Task.FromResult(summary);
+            return Task.FromResult(response);
         }
-
-        private static SessionSummaryDto DefaultGrade(FinishSessionRequest request) =>
-            new(request.Answers
-                .Select(a => new QuestionResultDto(a.QuestionId, 8, "Solid answer."))
-                .ToList());
     }
 
     private async Task<(Session session, Question question)> SeedSessionForAsync(string userId)
@@ -65,7 +59,8 @@ public class SessionServiceTests : IDisposable
     public async Task FinishSession_WhenCallerOwnsSession_GradesAndPersistsResults()
     {
         var (session, question) = await SeedSessionForAsync("owner");
-        var ai = new FakeAiService();
+        var aiResponse = new SessionSummaryDto([new QuestionResultDto(question.Id, 8, "Solid answer.")]);
+        var ai = new FakeAiService(aiResponse);
         var sut = new SessionService(_db, ai);
         var request = new FinishSessionRequest(session.Id, [new AnswerDto(question.Id, "My answer.")]);
 
@@ -86,7 +81,7 @@ public class SessionServiceTests : IDisposable
     public async Task FinishSession_WhenCallerDoesNotOwnSession_ThrowsAndPersistsNothing()
     {
         var (session, question) = await SeedSessionForAsync("owner");
-        var ai = new FakeAiService();
+        var ai = new FakeAiService(new SessionSummaryDto([]));
         var sut = new SessionService(_db, ai);
         var request = new FinishSessionRequest(session.Id, [new AnswerDto(question.Id, "Attacker answer.")]);
 
@@ -104,11 +99,12 @@ public class SessionServiceTests : IDisposable
     public async Task FinishSession_WhenAiReturnsUnknownQuestionId_PersistsOnlyAnsweredQuestions()
     {
         var (session, question) = await SeedSessionForAsync("owner");
-        var ai = new FakeAiService(_ => new SessionSummaryDto(
+        var aiResponse = new SessionSummaryDto(
         [
             new QuestionResultDto(question.Id, 7, "Graded."),
             new QuestionResultDto(9999, 5, "Phantom question never submitted."),
-        ]));
+        ]);
+        var ai = new FakeAiService(aiResponse);
         var sut = new SessionService(_db, ai);
         var request = new FinishSessionRequest(session.Id, [new AnswerDto(question.Id, "My answer.")]);
 
