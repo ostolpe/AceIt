@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Xml.Linq;
 using AceIt.DTOs;
 using Anthropic;
 using Anthropic.Models.Messages;
@@ -30,22 +29,15 @@ public class ClaudeService(IConfiguration config) : IAiService
             Model = Model.ClaudeHaiku4_5
         };
         var res = await client.Messages.Create(parameters);
+
+        if (res.Content.Count == 0)
+            throw new InvalidOperationException("Claude returned an empty response.");
+
         res.Content[0].TryPickText(out var textBlock);
-        Console.WriteLine($"Content count: {res.Content.Count}");
-        Console.WriteLine($"Raw response: {textBlock?.Text}");
-        var rawText = textBlock?.Text ?? throw new InvalidOperationException("No response from Claude.");
-        var cleanXml = rawText
-            .Replace("```xml", "")
-            .Replace("```", "")
-            .Trim();
-        var xml = XDocument.Parse(cleanXml);
+        var rawText = textBlock?.Text
+            ?? throw new InvalidOperationException("Claude returned no text content.");
 
-        var results = xml.Descendants("result").Select(r => new QuestionResultDto(
-            int.Parse(r.Element("questionId")!.Value),
-            int.Parse(r.Element("score")!.Value),
-            r.Element("feedback")!.Value
-        )).ToList();
-
+        var results = GradingResponseParser.Parse(rawText);
         return new SessionSummaryDto(results);
     }
 }

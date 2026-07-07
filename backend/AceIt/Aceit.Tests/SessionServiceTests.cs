@@ -38,19 +38,26 @@ public class SessionServiceTests : IDisposable
         _connection.Dispose();
     }
 
-    /// <summary>Grading stub that records whether it was invoked.</summary>
-    private sealed class FakeAiService : IAiService
+    /// <summary>
+    /// Grading stub that records whether it was invoked. By default it grades
+    /// every submitted answer; pass <paramref name="grader"/> to return a custom
+    /// response (e.g. an unexpected question id).
+    /// </summary>
+    private sealed class FakeAiService(Func<FinishSessionRequest, SessionSummaryDto>? grader = null) : IAiService
     {
         public bool WasCalled { get; private set; }
 
         public Task<SessionSummaryDto> GradeSession(FinishSessionRequest request)
         {
             WasCalled = true;
-            var results = request.Answers
-                .Select(a => new QuestionResultDto(a.QuestionId, 8, "Solid answer."))
-                .ToList();
-            return Task.FromResult(new SessionSummaryDto(results));
+            var summary = grader?.Invoke(request) ?? DefaultGrade(request);
+            return Task.FromResult(summary);
         }
+
+        private static SessionSummaryDto DefaultGrade(FinishSessionRequest request) =>
+            new(request.Answers
+                .Select(a => new QuestionResultDto(a.QuestionId, 8, "Solid answer."))
+                .ToList());
     }
 
     private async Task<(Session session, Question question)> SeedSessionForAsync(string userId)
@@ -105,5 +112,26 @@ public class SessionServiceTests : IDisposable
 
         var untouched = await _db.Sessions.AsNoTracking().SingleAsync(s => s.Id == session.Id);
         Assert.Null(untouched.CompletedAt);                     // victim's session unchanged
+    }
+
+    // The grading model can return a questionId that was never submitted; that
+    // must not crash the submission (BACKLOG P0 #3).
+    [Fact]
+    public async Task FinishSession_WhenAiReturnsUnknownQuestionId_PersistsOnlyAnsweredQuestions()
+    {
+        var (session, question) = await SeedSessionForAsync("owner");
+        var ai = new FakeAiService(_ => new SessionSummaryDto(
+        [
+            new QuestionResultDto(question.Id, 7, "Graded."),
+            new QuestionResultDto(9999, 5, "Phantom question never submitted."),
+        ]));
+        var sut = new SessionService(_db, ai);
+        var request = new FinishSessionRequest(session.Id, [new AnswerDto(question.Id, "My answer.")]);
+
+        await sut.FinishSession("owner", request);   // must not throw
+
+        var saved = await _db.QuestionResults.ToListAsync();
+        Assert.Single(saved);
+        Assert.Equal(question.Id, saved[0].QuestionId);
     }
 }

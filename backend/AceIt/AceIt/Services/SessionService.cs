@@ -38,14 +38,18 @@ public class SessionService(AppDbContext db, IAiService aiService) : ISessionSer
 
         var answerLookup = request.Answers.ToDictionary(a => a.QuestionId, a => a.Answer);
 
-        var results = summary.Results.Select(x => new QuestionResult
-        {
-            SessionId = request.SessionId,
-            QuestionId = x.QuestionId,
-            Score = x.Score,
-            Feedback = x.Feedback,
-            UserAnswer = answerLookup[x.QuestionId]
-        });
+        // The model can echo back a questionId that wasn't submitted; only keep
+        // grades for questions the user actually answered.
+        var results = summary.Results
+            .Where(x => answerLookup.ContainsKey(x.QuestionId))
+            .Select(x => new QuestionResult
+            {
+                SessionId = request.SessionId,
+                QuestionId = x.QuestionId,
+                Score = x.Score,
+                Feedback = x.Feedback,
+                UserAnswer = answerLookup[x.QuestionId]
+            });
 
         session.CompletedAt = DateTime.UtcNow;
 
