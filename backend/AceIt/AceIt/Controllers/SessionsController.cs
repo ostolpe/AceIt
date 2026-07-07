@@ -25,7 +25,10 @@ public class SessionsController(ISessionService sessionService) : ControllerBase
     [HttpPost("submit")]
     public async Task<IActionResult> FinishSession([FromBody] FinishSessionRequest request)
     {
-        var result = await sessionService.FinishSession(request);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new InvalidOperationException("User id claim missing from token.");
+
+        var result = await sessionService.FinishSession(userId, request);
         return Ok(result);
     }
 }

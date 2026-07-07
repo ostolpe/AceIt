@@ -28,9 +28,10 @@ public class SessionService(AppDbContext db, IAiService aiService) : ISessionSer
         return new SessionDto(session.Id, questionDtos);
     }
 
-    public async Task<SessionSummaryDto> FinishSession(FinishSessionRequest request)
+    public async Task<SessionSummaryDto> FinishSession(string userId, FinishSessionRequest request)
     {
-        var session = await db.Sessions.FindAsync(request.SessionId)
+        var session = await db.Sessions
+            .FirstOrDefaultAsync(s => s.Id == request.SessionId && s.UserId == userId)
             ?? throw new KeyNotFoundException($"Session {request.SessionId} not found.");
 
         var summary = await aiService.GradeSession(request);
