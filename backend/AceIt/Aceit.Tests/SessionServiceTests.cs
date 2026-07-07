@@ -7,11 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AceIt.Tests;
 
-/// <summary>
-/// Tests for <see cref="SessionService"/> backed by a real (in-memory) SQLite
-/// database so relational constraints — including the session-ownership filter —
-/// behave like production.
-/// </summary>
 public class SessionServiceTests : IDisposable
 {
     private readonly SqliteConnection _connection;
@@ -19,8 +14,6 @@ public class SessionServiceTests : IDisposable
 
     public SessionServiceTests()
     {
-        // A SQLite in-memory database lives only as long as its connection is open,
-        // so we hold the connection for the lifetime of the test.
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
 
@@ -38,11 +31,6 @@ public class SessionServiceTests : IDisposable
         _connection.Dispose();
     }
 
-    /// <summary>
-    /// Grading stub that records whether it was invoked. By default it grades
-    /// every submitted answer; pass <paramref name="grader"/> to return a custom
-    /// response (e.g. an unexpected question id).
-    /// </summary>
     private sealed class FakeAiService(Func<FinishSessionRequest, SessionSummaryDto>? grader = null) : IAiService
     {
         public bool WasCalled { get; private set; }
@@ -94,8 +82,6 @@ public class SessionServiceTests : IDisposable
         Assert.NotNull(completed.CompletedAt);
     }
 
-    // Regression test for the IDOR fix (BACKLOG P0 #1): a caller must not be able
-    // to grade or mutate a session they don't own.
     [Fact]
     public async Task FinishSession_WhenCallerDoesNotOwnSession_ThrowsAndPersistsNothing()
     {
@@ -107,15 +93,13 @@ public class SessionServiceTests : IDisposable
         await Assert.ThrowsAsync<KeyNotFoundException>(
             () => sut.FinishSession("attacker", request));
 
-        Assert.False(ai.WasCalled);                             // no wasted/leaky AI call
-        Assert.Empty(await _db.QuestionResults.ToListAsync());  // nothing graded or stored
+        Assert.False(ai.WasCalled);
+        Assert.Empty(await _db.QuestionResults.ToListAsync());
 
         var untouched = await _db.Sessions.AsNoTracking().SingleAsync(s => s.Id == session.Id);
-        Assert.Null(untouched.CompletedAt);                     // victim's session unchanged
+        Assert.Null(untouched.CompletedAt);
     }
 
-    // The grading model can return a questionId that was never submitted; that
-    // must not crash the submission (BACKLOG P0 #3).
     [Fact]
     public async Task FinishSession_WhenAiReturnsUnknownQuestionId_PersistsOnlyAnsweredQuestions()
     {
@@ -128,7 +112,7 @@ public class SessionServiceTests : IDisposable
         var sut = new SessionService(_db, ai);
         var request = new FinishSessionRequest(session.Id, [new AnswerDto(question.Id, "My answer.")]);
 
-        await sut.FinishSession("owner", request);   // must not throw
+        await sut.FinishSession("owner", request);
 
         var saved = await _db.QuestionResults.ToListAsync();
         Assert.Single(saved);

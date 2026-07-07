@@ -3,8 +3,6 @@ import type { ResultPageState } from "../../types";
 import "./ResultPage.css";
 
 const ResultPage = () => {
-  // Results are passed via navigation state from the quiz. On a refresh or a
-  // direct visit that state is gone, so send the user back to start a session.
   const state = useLocation().state as ResultPageState | null;
   if (!state) {
     return <Navigate to="/" replace />;

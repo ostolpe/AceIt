@@ -4,13 +4,6 @@ using AceIt.DTOs;
 
 namespace AceIt.Services;
 
-/// <summary>
-/// Parses the grading XML that <see cref="ClaudeService"/> asks the model to
-/// return. The model's output is untrusted: parsing tolerates markdown code
-/// fences, skips individual malformed <c>&lt;result&gt;</c> entries rather than
-/// failing the whole batch, and throws a single clear exception when the
-/// response cannot be understood at all.
-/// </summary>
 internal static class GradingResponseParser
 {
     public static List<QuestionResultDto> Parse(string rawText)
