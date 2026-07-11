@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
 
 export const useApi = () => {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const apiFetch = async (path: string, options?: RequestInit) => {
@@ -13,7 +15,10 @@ export const useApi = () => {
         ...options?.headers,
       },
     });
-    if (!res.ok) {
+    if (res.status == 401) {
+      logout();
+      navigate("/login");
+    } else if (!res.ok) {
       throw new Error(`API error: ${res.status}`);
     }
 
