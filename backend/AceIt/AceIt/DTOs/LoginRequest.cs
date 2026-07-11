@@ -1,4 +1,12 @@
-﻿namespace AceIt.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record LoginRequest(string Email, string Password);
+namespace AceIt.DTOs;
+
+public record LoginRequest(
+    [Required]
+    [EmailAddress]
+    string Email,
+    [Required]
+    string Password
+    );
 

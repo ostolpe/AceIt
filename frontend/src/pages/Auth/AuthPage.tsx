@@ -12,14 +12,22 @@ const config = {
     subtitle: "Sign in to continue your sessions.",
     endpoint: "/api/auth/login",
     submitLabel: "Sign in",
-    footer: { text: "Don't have an account?", linkTo: "/register", linkLabel: "Create one" },
+    footer: {
+      text: "Don't have an account?",
+      linkTo: "/register",
+      linkLabel: "Create one",
+    },
   },
   register: {
     title: "Create account",
     subtitle: "Start acing your sessions today.",
     endpoint: "/api/auth/register",
     submitLabel: "Create account",
-    footer: { text: "Already have an account?", linkTo: "/login", linkLabel: "Sign in" },
+    footer: {
+      text: "Already have an account?",
+      linkTo: "/login",
+      linkLabel: "Sign in",
+    },
   },
 } as const;
 
@@ -57,30 +65,38 @@ const AuthPage = ({ mode }: AuthPageProps) => {
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-field">
-            <label className="auth-label" htmlFor="email">Email</label>
+            <label className="auth-label" htmlFor="email">
+              Email
+            </label>
             <input
               id="email"
               className="auth-input"
               type="email"
               value={email}
+              required
               placeholder="you@example.com"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           <div className="auth-field">
-            <label className="auth-label" htmlFor="password">Password</label>
+            <label className="auth-label" htmlFor="password">
+              Password
+            </label>
             <input
               id="password"
               className="auth-input"
               type="password"
               value={password}
+              required
               placeholder="••••••••"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
-          <Button type="submit" className="auth-submit">{submitLabel}</Button>
+          <Button type="submit" className="auth-submit">
+            {submitLabel}
+          </Button>
         </form>
 
         <p className="auth-footer">
