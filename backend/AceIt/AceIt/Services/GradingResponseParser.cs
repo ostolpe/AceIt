@@ -1,6 +1,7 @@
 using System.Xml;
 using System.Xml.Linq;
 using AceIt.DTOs;
+using AceIt.Exceptions;
 
 namespace AceIt.Services;
 
@@ -20,7 +21,7 @@ internal static class GradingResponseParser
         }
         catch (XmlException ex)
         {
-            throw new InvalidOperationException(
+            throw new ExternalServiceException(
                 "Claude returned a grading response that was not valid XML.", ex);
         }
 
@@ -37,7 +38,7 @@ internal static class GradingResponseParser
         }
 
         if (results.Count == 0)
-            throw new InvalidOperationException("Claude returned no gradeable results.");
+            throw new ExternalServiceException("Claude returned no gradeable results.");
 
         return results;
     }

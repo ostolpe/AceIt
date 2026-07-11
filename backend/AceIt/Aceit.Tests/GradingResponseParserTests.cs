@@ -1,3 +1,4 @@
+using AceIt.Exceptions;
 using AceIt.Services;
 
 namespace AceIt.Tests;
@@ -33,9 +34,9 @@ public class GradingResponseParserTests
     }
 
     [Fact]
-    public void Parse_MalformedXml_ThrowsInvalidOperation()
+    public void Parse_MalformedXml_ThrowsExternalService()
     {
-        Assert.Throws<InvalidOperationException>(
+        Assert.Throws<ExternalServiceException>(
             () => GradingResponseParser.Parse("this is not xml <result"));
     }
 
@@ -72,7 +73,7 @@ public class GradingResponseParserTests
     [Fact]
     public void Parse_WhenNoValidResults_Throws()
     {
-        Assert.Throws<InvalidOperationException>(
+        Assert.Throws<ExternalServiceException>(
             () => GradingResponseParser.Parse("<results></results>"));
     }
 }

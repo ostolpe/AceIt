@@ -1,5 +1,6 @@
 using System.Text;
 using AceIt.Data;
+using AceIt.Middleware;
 using AceIt.Models;
 using AceIt.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,7 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IAiService, ClaudeService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
@@ -61,6 +63,7 @@ if (app.Environment.IsDevelopment())
     await DbSeeder.Seed(db, userManager);
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

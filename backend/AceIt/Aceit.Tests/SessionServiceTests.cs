@@ -1,5 +1,6 @@
 using AceIt.Data;
 using AceIt.DTOs;
+using AceIt.Exceptions;
 using AceIt.Models;
 using AceIt.Services;
 using Microsoft.Data.Sqlite;
@@ -85,7 +86,7 @@ public class SessionServiceTests : IDisposable
         var sut = new SessionService(_db, ai);
         var request = new FinishSessionRequest(session.Id, [new AnswerDto(question.Id, "Attacker answer.")]);
 
-        await Assert.ThrowsAsync<KeyNotFoundException>(
+        await Assert.ThrowsAsync<NotFoundException>(
             () => sut.FinishSession("attacker", request));
 
         Assert.False(ai.WasCalled);

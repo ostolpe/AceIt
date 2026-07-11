@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AceIt.DTOs;
+using AceIt.Exceptions;
 using Anthropic;
 using Anthropic.Models.Messages;
 
@@ -28,14 +29,22 @@ public class ClaudeService(IConfiguration config) : IAiService
             ],
             Model = Model.ClaudeHaiku4_5
         };
-        var res = await client.Messages.Create(parameters);
+        Message res;
+        try
+        {
+            res = await client.Messages.Create(parameters);
+        }
+        catch (Exception ex)
+        {
+            throw new ExternalServiceException("Claude request failed.", ex);
+        }
 
         if (res.Content.Count == 0)
-            throw new InvalidOperationException("Claude returned an empty response.");
+            throw new ExternalServiceException("Claude returned an empty response.");
 
         res.Content[0].TryPickText(out var textBlock);
         var rawText = textBlock?.Text
-            ?? throw new InvalidOperationException("Claude returned no text content.");
+            ?? throw new ExternalServiceException("Claude returned no text content.");
 
         var results = GradingResponseParser.Parse(rawText);
         return new SessionSummaryDto(results);

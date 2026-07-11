@@ -1,5 +1,6 @@
 ﻿using AceIt.Data;
 using AceIt.DTOs;
+using AceIt.Exceptions;
 using AceIt.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ public class ProfileService(AppDbContext db, UserManager<User> userManager) : IP
     public async Task<ProfileDto> GetProfileDataAsync(string userId)
     {
         var user = await userManager.FindByIdAsync(userId)
-        ?? throw new InvalidOperationException($"User {userId} not found");
+        ?? throw new NotFoundException("User not found");
 
         var userSessions = await db.Sessions
               .Where(s => s.UserId == userId)

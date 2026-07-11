@@ -1,5 +1,6 @@
 using AceIt.Data;
 using AceIt.DTOs;
+using AceIt.Exceptions;
 using AceIt.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +33,7 @@ public class SessionService(AppDbContext db, IAiService aiService) : ISessionSer
     {
         var session = await db.Sessions
             .FirstOrDefaultAsync(s => s.Id == request.SessionId && s.UserId == userId)
-            ?? throw new KeyNotFoundException($"Session {request.SessionId} not found.");
+            ?? throw new NotFoundException("Could not find a matching session");
 
         var summary = await aiService.GradeSession(request);
 
