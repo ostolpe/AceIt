@@ -82,3 +82,9 @@
   font-size: 0.875rem;
   color: var(--muted);
 }
+
+.auth-error {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: #f87171;
+}

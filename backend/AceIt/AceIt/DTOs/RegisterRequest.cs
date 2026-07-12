@@ -1,3 +1,7 @@
-﻿namespace AceIt.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record RegisterRequest(string Email, string Password);
+namespace AceIt.DTOs;
+
+public record RegisterRequest(
+        [Required] [EmailAddress] string Email, 
+        [Required] string Password);

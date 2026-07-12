@@ -6,7 +6,7 @@ export const useApi = () => {
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-  const apiFetch = async (path: string, options?: RequestInit) => {
+  const apiFetch = async <T>(path: string, options?: RequestInit): Promise<T> => {
     const res = await fetch(`${baseUrl}${path}`, {
       ...options,
       headers: {
@@ -15,14 +15,17 @@ export const useApi = () => {
         ...options?.headers,
       },
     });
-    if (res.status == 401) {
+
+    if (res.status === 401 && token) {
       logout();
       navigate("/login");
-    } else if (!res.ok) {
+      throw new Error("Session expired");
+    }
+    if (!res.ok) {
       throw new Error(`API error: ${res.status}`);
     }
 
-    return res.json();
+    return res.json() as Promise<T>;
   };
 
   return { apiFetch };

@@ -4,6 +4,7 @@ import type {
   Answer,
   Result,
   SessionResponse,
+  SubmitResponse,
   FinishRequest,
 } from "../../types";
 import QuestionCard from "../../components/QuestionCard";
@@ -26,7 +27,7 @@ const QuizPage = () => {
     const fetchQuestions = async () => {
       setIsLoading(true);
       try {
-        const res: SessionResponse = await apiFetch("/api/sessions");
+        const res = await apiFetch<SessionResponse>("/api/sessions");
         setQuestions(res.questions);
         setSessionId(res.id);
       } catch (err) {
@@ -63,7 +64,7 @@ const QuizPage = () => {
     };
 
     try {
-      const res = await apiFetch("/api/sessions/submit", {
+      const res = await apiFetch<SubmitResponse>("/api/sessions/submit", {
         method: "POST",
         body: JSON.stringify(request),
       });

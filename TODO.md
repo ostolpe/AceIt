@@ -1,6 +1,7 @@
 # TODO
 
 Refresh token - currently user has to relog every 30 minutes
+or implement oauth?? 
 
 1. login endpoint -> generate refresh token -> return TokenResponse -> save hash of refresh token to db
 2. refresh endpoint -> find user in db from refresh token -> make new token+refresh token, invalidate old -> return TokenResponse
@@ -13,11 +14,6 @@ Refresh token - currently user has to relog every 30 minutes
 Fix so backend returns an equal amount of questions from each topic
 Different modes of questions (weaknesses, general knowledge, specifics topics etc)
 Easy/medium/hard-mode. Or junior/mid/senior mode?
-
-## Security
-
-- how can we assure users dont spend a million tokens? word cap on answers? rate limiting on submitting?
-- not great with my own JWT - exchange for oAuth or similar (maybe only external login tbh, github+google should be enough)
 
 ## Ideas on func to implement
 

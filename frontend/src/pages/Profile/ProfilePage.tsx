@@ -77,7 +77,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const res: ProfileData = await apiFetch("/api/profile");
+        const res = await apiFetch<ProfileData>("/api/profile");
         setProfileData(res);
       } catch (err) {
         console.log(err);

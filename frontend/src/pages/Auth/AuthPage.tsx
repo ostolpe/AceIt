@@ -38,6 +38,7 @@ interface AuthPageProps {
 const AuthPage = ({ mode }: AuthPageProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const { apiFetch } = useApi();
   const navigate = useNavigate();
@@ -45,15 +46,20 @@ const AuthPage = ({ mode }: AuthPageProps) => {
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setError("");
     try {
-      const res: LoginResponse = await apiFetch(endpoint, {
+      const res = await apiFetch<LoginResponse>(endpoint, {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
       login(res.token);
-      if (mode === "login") navigate("/profile");
-    } catch (err) {
-      console.log(err);
+      navigate("/profile");
+    } catch {
+      setError(
+        mode === "login"
+          ? "Invalid email or password."
+          : "Could not create your account. Try a different email.",
+      );
     }
   };
 
@@ -93,6 +99,8 @@ const AuthPage = ({ mode }: AuthPageProps) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
+          {error && <p className="auth-error">{error}</p>}
 
           <Button type="submit" className="auth-submit">
             {submitLabel}

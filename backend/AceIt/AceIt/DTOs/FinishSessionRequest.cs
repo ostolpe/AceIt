@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 namespace AceIt.DTOs;
 
 public record FinishSessionRequest(
-    [Required]
+    [Range(1, int.MaxValue)]
     int SessionId,
     [Required]
-    IEnumerable<AnswerDto> Answers
-    );
+    [MinLength(1)]
+    IEnumerable<AnswerDto> Answers);
