@@ -6,6 +6,7 @@ import AuthPage from "./pages/Auth/AuthPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import HomePage from "./pages/Home/HomePage";
+import DashboardPage from "./pages/Dashboard/DashboardPage";
 import Button from "./components/Button";
 import { useAuth } from "./hooks/useAuth";
 
@@ -28,6 +29,9 @@ function App() {
         <nav className="app-nav">
           {isAuthenticated ? (
             <>
+              <Link to="/dashboard" className="btn btn-ghost">
+                Practice
+              </Link>
               <Link to="/profile" className="btn btn-ghost">
                 Profile
               </Link>
@@ -58,6 +62,14 @@ function App() {
             }
           />
           <Route path="/" element={<HomePage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/register" element={<AuthPage mode="register" />} />
           <Route

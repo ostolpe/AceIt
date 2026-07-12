@@ -53,7 +53,7 @@ const AuthPage = ({ mode }: AuthPageProps) => {
         body: JSON.stringify({ email, password }),
       });
       login(res.token);
-      navigate("/profile");
+      navigate("/dashboard");
     } catch {
       setError(
         mode === "login"

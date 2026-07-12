@@ -1,0 +1,72 @@
+.dashboard {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-hero {
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard-eyebrow {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue-strong);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.dashboard-title {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+.dashboard-title-accent {
+  color: var(--blue);
+}
+
+.dashboard-sub {
+  max-width: 34rem;
+  margin: 0 auto 2rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.dashboard-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.dashboard-start {
+  padding: 0.85rem 1.75rem;
+  font-size: 1.05rem;
+}
+
+.dashboard-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.dashboard-topic-chip {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}

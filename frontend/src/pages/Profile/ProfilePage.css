@@ -127,7 +127,7 @@
 
 .profile-topics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -156,10 +156,9 @@
 .profile-topic-name {
   font-size: 0.95rem;
   font-weight: 700;
+  line-height: 1.2;
   color: var(--white);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
 }
 
 .profile-topic-questions {
