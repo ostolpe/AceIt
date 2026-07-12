@@ -12,13 +12,13 @@ namespace AceIt.Controllers
     {
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetProfileData()
+        public async Task<IActionResult> GetProfileData(CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
-                return NotFound();
+                return Unauthorized();
 
-            var res = await service.GetProfileDataAsync(userId);
+            var res = await service.GetProfileDataAsync(userId, cancellationToken);
 
             return Ok(res);
         }

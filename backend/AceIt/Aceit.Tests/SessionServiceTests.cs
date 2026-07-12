@@ -36,7 +36,7 @@ public class SessionServiceTests : IDisposable
     {
         public bool WasCalled { get; private set; }
 
-        public Task<SessionSummaryDto> GradeSession(FinishSessionRequest request)
+        public Task<SessionSummaryDto> GradeSession(FinishSessionRequest request, CancellationToken cancellationToken = default)
         {
             WasCalled = true;
             return Task.FromResult(response);

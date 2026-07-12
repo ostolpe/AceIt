@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Text;
 using AceIt.Models;
-using Anthropic.Models.Beta.Environments;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AceIt.Services;
@@ -27,7 +26,7 @@ public class JwtService(IConfiguration config)
             issuer: "Backend",
             audience: "Frontend",
             claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
+            expires: DateTime.UtcNow.AddMinutes(30),
             signingCredentials: creds
         );
 

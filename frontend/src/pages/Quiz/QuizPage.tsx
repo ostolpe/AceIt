@@ -37,7 +37,7 @@ const QuizPage = () => {
       }
     };
     fetchQuestions();
-  }, []);
+  }, [apiFetch]);
 
   const handleAnswer = (questionId: number, answer: string) => {
     setAnswers((prev) => {

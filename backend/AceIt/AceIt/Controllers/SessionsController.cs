@@ -12,23 +12,23 @@ public class SessionsController(ISessionService sessionService) : ControllerBase
 {
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> StartSession()
+    public async Task<IActionResult> StartSession(CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             ?? throw new InvalidOperationException("User id claim missing from token.");
 
-        var result = await sessionService.StartSession(userId);
+        var result = await sessionService.StartSession(userId, cancellationToken);
         return Ok(result);
     }
 
     [Authorize]
     [HttpPost("submit")]
-    public async Task<IActionResult> FinishSession([FromBody] FinishSessionRequest request)
+    public async Task<IActionResult> FinishSession([FromBody] FinishSessionRequest request, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             ?? throw new InvalidOperationException("User id claim missing from token.");
 
-        var result = await sessionService.FinishSession(userId, request);
+        var result = await sessionService.FinishSession(userId, request, cancellationToken);
         return Ok(result);
     }
 }

@@ -84,7 +84,7 @@ const ProfilePage = () => {
       }
     };
     fetchProfileData();
-  }, []);
+  }, [apiFetch]);
 
   return (
     <div className="profile">

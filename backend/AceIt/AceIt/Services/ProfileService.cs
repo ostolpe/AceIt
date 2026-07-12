@@ -9,7 +9,7 @@ namespace AceIt.Services;
 
 public class ProfileService(AppDbContext db, UserManager<User> userManager) : IProfileService
 {
-    public async Task<ProfileDto> GetProfileDataAsync(string userId)
+    public async Task<ProfileDto> GetProfileDataAsync(string userId, CancellationToken cancellationToken = default)
     {
         var user = await userManager.FindByIdAsync(userId)
         ?? throw new NotFoundException("User not found");
@@ -19,7 +19,7 @@ public class ProfileService(AppDbContext db, UserManager<User> userManager) : IP
               .Include(s => s.Results)
               .ThenInclude(r => r.Question)
               .AsNoTracking()
-              .ToListAsync();
+              .ToListAsync(cancellationToken);
 
         var userResults = userSessions
             .SelectMany(s => s.Results)

@@ -14,6 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+var corsPolicyName = "Frontend";
+builder.Services.AddCors(options =>
+    options.AddPolicy(corsPolicyName, policy =>
+        policy.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [])
+            .AllowAnyHeader()
+            .AllowAnyMethod()));
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IAiService, ClaudeService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
@@ -52,11 +59,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    app.UseCors(x => x
-    .AllowAnyHeader()
-    .AllowAnyOrigin()
-    .AllowAnyMethod());
-
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -65,6 +67,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseCors(corsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

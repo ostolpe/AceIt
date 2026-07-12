@@ -4,5 +4,5 @@ namespace AceIt.Services;
 
 public interface IProfileService
 {
-    public Task<ProfileDto> GetProfileDataAsync(string userId);
+    public Task<ProfileDto> GetProfileDataAsync(string userId, CancellationToken cancellationToken = default);
 }

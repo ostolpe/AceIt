@@ -8,7 +8,7 @@ namespace AceIt.Services;
 
 public class ClaudeService(IConfiguration config) : IAiService
 {
-    public async Task<SessionSummaryDto> GradeSession(FinishSessionRequest request)
+    public async Task<SessionSummaryDto> GradeSession(FinishSessionRequest request, CancellationToken cancellationToken = default)
     {
         var client = new AnthropicClient
         { ApiKey = config["Anthropic:ANTHROPIC_API_KEY"] };
@@ -32,7 +32,7 @@ public class ClaudeService(IConfiguration config) : IAiService
         Message res;
         try
         {
-            res = await client.Messages.Create(parameters);
+            res = await client.Messages.Create(parameters, cancellationToken);
         }
         catch (Exception ex)
         {
